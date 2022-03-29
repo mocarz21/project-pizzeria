@@ -92,8 +92,12 @@
     }
     initAccordion(){
       const thisProduct = this;
+      
+      
       /* find the clickable trigger (the element that should react to clicking) */
-      const clickableTrigger = document.querySelector(select.menuProduct.clickable);
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      
+
       /* START: add event listener to clickable trigger on event click */
       clickableTrigger.addEventListener('click' , function(event){
 
@@ -102,17 +106,17 @@
 
         /* find active product (product that has active class) */
         let activeProduct = document.querySelector(classNames.menuProduct.wrapperActive);                     // Czy mogę użyć classList po querySelector w celu wyszukania klasy ?
-        
 
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if (activeProduct && (thisProduct.element != activeProduct)){                                         //czemu nie działał zapis thisProduct.element != activeProduct ? czemu tak (activeProduct && (thisProduct.element != activeProduct))??
-          activeProduct.classList.remove('active')
+          activeProduct.classList.remove('active');
         }
-console.log('active product : ', activeProduct)
+        console.log('active product : ', activeProduct);
         /* toggle active class on thisProduct.element */
-        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive)
+        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
 
-      });                                                                                                     // po co tenm nawias ????
+      }); 
+                                                                                                         // po co tenm nawias ????
     }
     renderInMenu(){
       const thisProduct = this;
