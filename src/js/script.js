@@ -59,7 +59,7 @@
       console.log('this app.data : ' ,thisApp.data);
 
       for(let productData in thisApp.data.products){
-        new Product(productData, thisApp.data.products[productData]);                                           //jak to się dzieje ze on pobiera dane z obiektu nie rozumiem składni ?? skad wie ze ma odniesc sie do pliku data skoro jest zamkniete w petli czy to oznacza ze przy takim zapisie mozemy wychodzic poza script.js ale z zewnatrz nikt nie moze sie odwołac ?
+        new Product(productData, thisApp.data.products[productData]);                                           
       }
     },
     
@@ -87,11 +87,11 @@
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
-      thisProduct.getElements();                                                                                // po co początek thisProductn ?
+      thisProduct.getElements();                                                                                
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
       thisProduct.processOrder();
-      console.log('new product : ', thisProduct);                                                              //w mozilla kiedy widze na co wskazuje this upewnic sie ze to co jest kolorem  ??
+      console.log('new product : ', thisProduct);                                                              
     }
     initAccordion(){
       const thisProduct = this;
@@ -110,22 +110,22 @@
         event.preventDefault();
 
         /* find active product (product that has active class) */
-        let activeProduct = document.querySelector(select.all.menuProductsActive);                     // Czy mogę użyć classList po querySelector w celu wyszukania klasy ?
+        let activeProduct = document.querySelector(select.all.menuProductsActive);                     
 
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-        if (activeProduct && (thisProduct.element != activeProduct)){                                         //czemu nie działał zapis thisProduct.element != activeProduct ? czemu tak (activeProduct && (thisProduct.element != activeProduct))??
+        if (activeProduct && (thisProduct.element != activeProduct)){                                         
           activeProduct.classList.remove('active');
         }
         console.log('active product : ', activeProduct);
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
 
-      });                                                                                                      // po co tenm nawias ????
+      });                                                                                                      
 
     }
     initOrderForm(){
       const thisProduct = this;
-      console.log('initOrderForm :', this)
+      console.log('initOrderForm :', this);
 
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
@@ -146,7 +146,8 @@
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      
+  
+      console.log('formData', formData);
 
       // set price to default price
       let price = thisProduct.data.price;
@@ -156,28 +157,35 @@
 
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        
+        console.log('paramId i param ', paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
 
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          
-          //sprawdzenie czy jest zaznaczona opcja default: true
 
-          //jezeli nie jest zaznaczona dodaj do price optionId(element prowadzacy do wartosci w obiekcie price) jeżeli nie odejmij od price  optionId(element prowadzacy do wartosci w obiekcie price)
-          
+          console.log(optionId, option);
+
+          if (formData[paramId] && formData[paramId].includes(optionId)) {   //po co formData[paramId] i jeszcze raz to samo calosc do wytlumaczenia !!!!
+            if (!option.default) {
+              price += option.price;
+            }
+          }
+          else {
+            if (option.default == true) {
+              price -= option.price;
+            }
+          }
         }
       }
+
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
-
-      
-
-      console.log('price :', price);
     }
-    
+
+
+
 
     renderInMenu(){
       const thisProduct = this;
@@ -204,7 +212,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      console.log('sprawdzenie przewidywan : ',thisProduct.formInputs)
+      
     } 
   }
   app.init();
